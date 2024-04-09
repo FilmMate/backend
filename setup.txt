@@ -1,0 +1,8 @@
+# if execution policy is disabled on vs code
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process
+
+# activating the environment
+./env/bin/activate
+
+# installing the requirements
+pip install -r requirements.txt
