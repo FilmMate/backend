@@ -21,7 +21,7 @@ def get_latest():
         "result": filtered_response,
         "page": response['page'],
         "total_pages": response["total_pages"]
-    }, 200)
+    })
 
 
 @app.route("/getmoviedetail", methods=['GET'])
