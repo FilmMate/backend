@@ -5,12 +5,20 @@ class Endpoints:
         self.trendingMovie = f"{self.baseUrl}/trending/movie/day"
         self.getMovieDetail = f"{self.baseUrl}/movie"
         self.discoverMovie = f"{self.baseUrl}/discover/movie"
+        self.trendingTV = f"{self.baseUrl}/trending/tv/day"
+        self.getTVdetail = f"{self.baseUrl}/tv"
     
     def get_media(self, api_key, mid, media_type):
         if media_type == 'image':
             return f"{self.getMovieDetail}/{mid}/images?api_key={api_key}"
         if media_type == 'video':
             return f"{self.getMovieDetail}/{mid}/videos?api_key={api_key}"
+        
+    def get_tv_media(self, api_key, tid, media_type):
+        if media_type == 'image':
+            return f"{self.getTVdetail}/{tid}/images?api_key={api_key}"
+        if media_type == 'videos':
+            return f"{self.getTVdetail}/{tid}/videos?api_key={api_key}"
     
     def get_movie_detail(self, api_key, mid):
         return f"{self.getMovieDetail}/{mid}?api_key={api_key}"
