@@ -58,7 +58,7 @@ def fetch_video(url):
 
 def fetch_detail(url):
     response = fetch_data(url)
-    title, overview, duration, lang, genres = None, None, None, None, []
+    title, overview, duration, lang, genres,rating,release_date = None, None, None, None, [], 0, None
     if response is not None:
         if 'title' in response:
             title = response['title']
@@ -70,12 +70,18 @@ def fetch_detail(url):
             genres = [genre["name"] for genre in response["genres"]]
         if 'original_language' in response:
             lang = response['original_language']
+        if 'release_date' in response:
+            release_date = response['release_date']
+        if 'vote_average' in response:
+            rating = round(response['vote_average']/2,2)
         return {
             'title': title,
             'overview': overview,
             'duration': duration,
             'genres': genres,
-            'lang' : lang
+            'lang' : lang,
+            'release_date' : release_date,
+            'rating' : rating
         }
     else:
         return {
@@ -83,7 +89,9 @@ def fetch_detail(url):
             'overview': overview,
             'duration': duration,
             'genres': genres,
-            'lang' : lang
+            'lang' : lang,
+            'release_date' : release_date,
+            'rating' : rating
         }
 
 
