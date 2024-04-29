@@ -23,8 +23,14 @@ class Endpoints:
     def get_movie_detail(self, api_key, mid):
         return f"{self.getMovieDetail}/{mid}?api_key={api_key}"
     
+    def get_tv_detail(self, api_key, tid):
+        return f"{self.getTVdetail}/{tid}?api_key={api_key}"
+    
     def get_cast_and_crew(self, api_key, mid):
         return f"{self.getMovieDetail}/{mid}/credits?api_key={api_key}"
+    
+    def get_tv_credits(self, api_key, tid):
+         return f"{self.getTVdetail}/{tid}/credits?api_key={api_key}"
     
     def latest(self,api_key,lang,page = 1):
         dates = get_dates()
