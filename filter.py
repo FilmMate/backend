@@ -1,4 +1,3 @@
-from date_time_process import format_time
 from endpoints import Endpoints
 from fetch_services import fetch_detail, fetch_images, fetch_video, fetch_cast_and_crew
 from genres import Genres
@@ -32,6 +31,25 @@ def filter_response(api_key, response):
         }
         filtered_response.append(movie_data)
     return filtered_response
+
+def filter_tv_detail(api_key, response,tid):
+    media_image = fetch_images(url=endpoints.get_tv_media(api_key=api_key,tid=tid,media_type="image"))
+    video = fetch_video(url=endpoints.get_tv_media(api_key=api_key,tid=tid,media_type="videos"))
+    tv_data = {
+            "video" : video["key"],
+            "site" : video["site"],
+            "type" : 'tv',
+            'poster_path': media_image["poster"],
+            'backdrop_path': media_image["backdrop"],
+            "id" : tid,
+            "title" : response['name'],
+            "overview" : response['overview'],
+            "genres" : [genre["name"] for genre in response["genres"]],
+            "lang" :  response['original_language'],
+            "release_date" : response['first_air_date'],
+            "rating" : round(response['vote_average']/2,2),
+        }
+    return tv_data
 
 def filter_tv(api_key, response):
     filtered_response = []
