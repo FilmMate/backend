@@ -60,3 +60,62 @@
   "total_pages": 1
 }
 ```
+---
+## Get Movie Detail
+
+- **Endpoint**: `/getmoviedetail`
+- **Method**: `GET`
+  
+### Parameters
+
+- `api_key` (string, required): API key for authentication.
+- `mid` (string, required): Movie ID for the movie detail to be retrieved.
+
+### Sample Response
+
+```json
+    {
+        "title": "Dilwale Dulhania Le Jayenge",
+        "overview": "Raj is a rich, carefree, happy-go-lucky second generation NRI. Simran is the daughter of Chaudhary Baldev Singh, who in spite of being an NRI is very strict about adherence to Indian values. Simran has left for India to be married to her childhood fiancé. Raj leaves for India with a mission at his hands, to claim his lady love under the noses of her whole family. Thus begins a saga.",
+        "duration": "3h 10m",
+        "genres": [
+            "Comedy",
+            "Drama",
+            "Romance"
+        ],
+        "release_date": "1995-10-20",
+        "rating": 4.27,
+        "lang": "hi",
+        "poster_path": "/2CAL2433ZeIihfX1Hb2139CX0pW.jpg",
+        "backdrop_path": "/vI3aUGTuRRdM7J78KIdW98LdxE5.jpg",
+        "video": "https://youtu.be/oIZ4U21DRlM",
+        "site": "YouTube",
+        "type": "movie",
+        "cast": [
+            {
+                "character": "Simran Singh",
+                "name": "Kajol"
+            },
+            {
+                "character": "Raj Malhotra",
+                "name": "Shah Rukh Khan"
+            },
+            {
+                "character": "Chaudhry Baldev Singh",
+                "name": "Amrish Puri"
+            },
+            ...
+        ],
+        "crew": [
+            {
+                "job": "director",
+                "name": "Aditya Chopra"
+            },
+            {
+                "job": "producer",
+                "name": "Yash Chopra"
+            },
+            ...
+        ]
+    }
+```
