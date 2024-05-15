@@ -46,7 +46,7 @@
                 ],
                 "id": 1069945,
                 "lang": "ml",
-                "overview": "Manjummel Boys, based on a real story, is about a bunch of friends who set out on a trip to Kodaikanal and the events that occur there.",
+                "overview": "Manjummel Boys, based on a real story, is about ...",
                 "poster_path": "/awOxXBZHh3jvFEOLJvTaJOX5urU.jpg",
                 "rating": 3.95,
                 "release_date": "2024-02-22",
@@ -76,7 +76,7 @@
 ```json
     {
         "title": "Dilwale Dulhania Le Jayenge",
-        "overview": "Raj is a rich, carefree, happy-go-lucky second generation NRI. Simran is the daughter of Chaudhary Baldev Singh, who in spite of being an NRI is very strict about adherence to Indian values. Simran has left for India to be married to her childhood fiancé. Raj leaves for India with a mission at his hands, to claim his lady love under the noses of her whole family. Thus begins a saga.",
+        "overview": "Raj is a rich, carefree, happy-go-lucky second generation NRI ...",
         "duration": "3h 10m",
         "genres": [
             "Comedy",
