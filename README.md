@@ -9,13 +9,15 @@
 
 - `api_key` (string, required): API key for authentication.
 - `lang` (string, optional): Language preference for movie information.
-    - values :
-      - `ml` for Malayalam
-      - `tn` for Tamil
-      - `hi` for Hindi
-      - `en` for English
-      - and so on
-    - By default `lang` is `en`
+  
+  | Value (lang) | Language   |
+  | ------------ | ---------- |
+  | `ml`         | Malayalam  |
+  | `tn`         | Tamil      |
+  | `hi`         | Hindi      |
+  | `en`         | English    |
+  - and so on
+  - By default `lang` is `en`
 - `page` (integer, optional): Page number for pagination.
 
 ### Sample Response
