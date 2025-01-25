@@ -3,11 +3,68 @@ from endpoints import Endpoints
 from fetch_services import fetch_cast_and_crew, fetch_data, fetch_detail, fetch_images, fetch_video
 from filter import filter_response, filter_tv, filter_tv_detail
 from flask_caching import Cache
+from google.cloud import firestore
 
 endpoint = Endpoints()
 app = Flask(__name__)
 cache = Cache(app, config={'CACHE_TYPE': 'simple', 'CACHE_QUERY_STRING': True})
 
+
+hero_override = False
+
+
+# Path to your service account key JSON file
+service_account_path = "/home/filmmate/mysite/filmmate-22f8b-firebase-adminsdk-coe0p-87ed401eea.json"
+
+# Initialize Firestore client with the service account key
+db = firestore.Client.from_service_account_json(service_account_path)
+
+@app.route("/gethero", methods=['GET'])
+def get_hero():
+    try:
+        # Retrieve the hero document from the Firestore collection
+        hero_doc = db.collection("customizations").document("hero").get()
+
+        if hero_doc.exists:
+            # Get the 'results' field from the document
+            hero_list = hero_doc.to_dict().get("results", [])
+        else:
+            hero_list = []
+
+        # Ensure the hero_list contains valid data (no empty objects)
+        hero_override = bool(hero_list and any(bool(item) for item in hero_list))
+
+        # Ensure both hero_list contains valid data AND hero_override is True
+        if hero_list and hero_override:
+            return jsonify({"result": hero_list}), 200
+        else:
+            # Fallback to fetch data from the external API
+            response = fetch_data(url=endpoint.getNowPlaying,
+                              params={
+                                  "api_key": request.args.get('api_key'),
+                              })
+            filtered_response = filter_response(
+            api_key=request.args.get('api_key'), response=response)
+
+            return jsonify({
+            "result": filtered_response,
+            "page": response['page'],
+            "total_pages": response["total_pages"]
+            }), 203
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route("/triggerhero", methods=['GET'])
+def trigger_override():
+    global hero_override  # Use global to modify the variable
+    hero_override = not hero_override
+    return jsonify({"hero_override": hero_override}), 200
+
+@app.route("/getherostatus", methods=['GET'])
+def get_hero_status():
+    global hero_override
+    return jsonify({"hero_override": hero_override}), 200
 
 @app.route("/getlatest", methods=['GET'])
 @cache.cached(timeout=300, key_prefix=lambda: request.full_path)
@@ -98,4 +155,4 @@ def get_latest_tv():
 
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    app.run(port=6000,debug=True)

@@ -7,6 +7,7 @@ class Endpoints:
         self.discoverMovie = f"{self.baseUrl}/discover/movie"
         self.trendingTV = f"{self.baseUrl}/trending/tv/day"
         self.getTVdetail = f"{self.baseUrl}/tv"
+        self.getNowPlaying = f"{self.baseUrl}/movie/now_playing"
     
     def get_media(self, api_key, mid, media_type):
         if media_type == 'image':
@@ -45,4 +46,3 @@ class Endpoints:
         "page" : page
         }
         return params
-        
