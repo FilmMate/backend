@@ -4,20 +4,61 @@ from fetch_services import fetch_cast_and_crew, fetch_data, fetch_detail, fetch_
 from filter import filter_response, filter_tv, filter_tv_detail
 from flask_caching import Cache
 from google.cloud import firestore
+from flask_cors import CORS
 
 endpoint = Endpoints()
 app = Flask(__name__)
+CORS(app)
 cache = Cache(app, config={'CACHE_TYPE': 'simple', 'CACHE_QUERY_STRING': True})
 
 
 hero_override = False
-
+movie_override = False
+tv_override = False
 
 # Path to your service account key JSON file
 service_account_path = "/home/filmmate/mysite/filmmate-22f8b-firebase-adminsdk-coe0p-87ed401eea.json"
 
 # Initialize Firestore client with the service account key
 db = firestore.Client.from_service_account_json(service_account_path)
+
+@app.route("/getmovie", methods=['GET'])
+def get_movie():
+    try:
+        # Retrieve the hero document from the Firestore collection
+        hero_doc = db.collection("customizations").document("FilmMateMovies").get()
+
+        if hero_doc.exists:
+            # Get the 'results' field from the document
+            hero_list = hero_doc.to_dict().get("results", [])
+        else:
+            hero_list = []
+        if movie_override :
+            return jsonify({"results": hero_list}), 200
+        else:
+            return jsonify({"results": []}), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route("/gettv", methods=['GET'])
+def get_tv():
+    try:
+        # Retrieve the hero document from the Firestore collection
+        hero_doc = db.collection("customizations").document("FilmMateTV").get()
+
+        if hero_doc.exists:
+            # Get the 'results' field from the document
+            hero_list = hero_doc.to_dict().get("results", [])
+        else:
+            hero_list = []
+        if tv_override :
+            return jsonify({"results": hero_list}), 200
+        else:
+            return jsonify({"results": []}), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 @app.route("/gethero", methods=['GET'])
 def get_hero():
@@ -32,11 +73,11 @@ def get_hero():
             hero_list = []
 
         # Ensure the hero_list contains valid data (no empty objects)
-        hero_override = bool(hero_list and any(bool(item) for item in hero_list))
+        #hero_override = bool(hero_list and any(bool(item) for item in hero_list))
 
         # Ensure both hero_list contains valid data AND hero_override is True
-        if hero_list and hero_override:
-            return jsonify({"result": hero_list}), 200
+        if hero_override and len(hero_list) == 5:
+            return jsonify({"results": hero_list}), 200
         else:
             # Fallback to fetch data from the external API
             response = fetch_data(url=endpoint.getNowPlaying,
@@ -47,7 +88,7 @@ def get_hero():
             api_key=request.args.get('api_key'), response=response)
 
             return jsonify({
-            "result": filtered_response,
+            "results": filtered_response,
             "page": response['page'],
             "total_pages": response["total_pages"]
             }), 203
@@ -56,15 +97,37 @@ def get_hero():
         return jsonify({"error": str(e)}), 500
 
 @app.route("/triggerhero", methods=['GET'])
-def trigger_override():
+def trigger_hero_override():
     global hero_override  # Use global to modify the variable
     hero_override = not hero_override
     return jsonify({"hero_override": hero_override}), 200
+
+@app.route("/triggermovie", methods=['GET'])
+def trigger_movie_override():
+    global movie_override  # Use global to modify the variable
+    movie_override = not movie_override
+    return jsonify({"hero_override": movie_override}), 200
+
+@app.route("/triggertv", methods=['GET'])
+def trigger_tv_override():
+    global tv_override  # Use global to modify the variable
+    tv_override = not tv_override
+    return jsonify({"hero_override": tv_override}), 200
 
 @app.route("/getherostatus", methods=['GET'])
 def get_hero_status():
     global hero_override
     return jsonify({"hero_override": hero_override}), 200
+
+@app.route("/getmoviestatus", methods=['GET'])
+def get_movie_status():
+    global movie_override
+    return jsonify({"hero_override": movie_override}), 200
+
+@app.route("/gettvstatus", methods=['GET'])
+def get_tv_status():
+    global tv_override
+    return jsonify({"hero_override": tv_override}), 200
 
 @app.route("/getlatest", methods=['GET'])
 @cache.cached(timeout=300, key_prefix=lambda: request.full_path)
